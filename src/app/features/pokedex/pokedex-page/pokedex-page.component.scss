@@ -140,3 +140,65 @@ tr:hover {
   gap: 16px;
   margin-top: 20px;
 }
+
+tr {
+  cursor: pointer;
+}
+
+.detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+
+  display: flex;
+  justify-content: flex-end;
+
+  z-index: 1000;
+}
+
+.detail-panel {
+  width: 400px;
+  height: 100vh;
+  background: white;
+
+  padding: 24px;
+
+  overflow-y: auto;
+
+  animation: slideIn 0.25s ease;
+}
+
+.close-button {
+  float: right;
+  background: transparent;
+  color: black;
+  font-size: 20px;
+}
+
+.detail-section {
+  margin-bottom: 24px;
+}
+
+.stats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}

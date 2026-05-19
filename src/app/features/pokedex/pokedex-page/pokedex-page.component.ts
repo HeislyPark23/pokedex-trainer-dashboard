@@ -48,6 +48,9 @@ export class PokedexPageComponent {
 
   readonly pageSize = signal(10);
 
+  readonly selectedPokemon =
+  signal<Pokemon | null>(null);
+
   /**
    * Pokémon list signal from store.
    */
@@ -136,7 +139,25 @@ export class PokedexPageComponent {
       this.currentPage.update((page) => page - 1);
     }
   }
+
+  /**
+   * Opens Pokémon detail panel.
+   */
+  selectPokemon(
+    pokemon: Pokemon
+  ): void {
+    this.selectedPokemon.set(pokemon);
+  }
+
+  /**
+   * Closes Pokémon detail panel.
+   */
+  closeDetails(): void {
+    this.selectedPokemon.set(null);
+  }
+
   constructor() {
     this.pokemonStore.loadPokemons(20, 0);
   }
 }
+

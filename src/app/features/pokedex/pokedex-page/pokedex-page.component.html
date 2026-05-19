@@ -34,7 +34,7 @@
 
   <tbody>
     @for (pokemon of paginatedPokemons(); track pokemon.id) {
-      <tr>
+      <tr (click)="selectPokemon(pokemon)">
         <td>{{ pokemon.id }}</td>
 
         <td class="pokemon-name">
@@ -86,3 +86,76 @@
     Next
   </button>
 </div>
+
+@if (selectedPokemon(); as pokemon) {
+  <div class="detail-overlay">
+    <div class="detail-panel">
+
+      <button
+        class="close-button"
+        (click)="closeDetails()"
+      >
+        ✕
+      </button>
+
+      <h2>
+        {{ pokemon.name }}
+      </h2>
+
+      <div class="detail-section">
+        <strong>ID:</strong>
+        {{ pokemon.id }}
+      </div>
+
+      <div class="detail-section">
+        <strong>Height:</strong>
+        {{ pokemon.height }}
+      </div>
+
+      <div class="detail-section">
+        <strong>Weight:</strong>
+        {{ pokemon.weight }}
+      </div>
+
+      <div class="detail-section">
+        <strong>Types:</strong>
+
+        <div class="types">
+          @for (
+            type of pokemon.pokemon_v2_pokemontypes;
+            track type.pokemon_v2_type.name
+          ) {
+            <span
+              class="type-badge"
+              [class]="type.pokemon_v2_type.name"
+            >
+              {{ type.pokemon_v2_type.name }}
+            </span>
+          }
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <strong>Base Stats:</strong>
+
+        <div class="stats-list">
+          @for (
+            stat of pokemon.pokemon_v2_pokemonstats;
+            track stat.pokemon_v2_stat.name
+          ) {
+            <div class="stat-row">
+              <span>
+                {{ stat.pokemon_v2_stat.name }}
+              </span>
+
+              <span>
+                {{ stat.base_stat }}
+              </span>
+            </div>
+          }
+        </div>
+      </div>
+
+    </div>
+  </div>
+}
