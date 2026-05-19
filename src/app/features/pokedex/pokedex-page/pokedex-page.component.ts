@@ -19,7 +19,9 @@ import { PokemonStore } from '../../../state/pokemon.store';
 import {
   selectLoading,
   selectPokemons,
+  
 } from '../../../state/pokemon.selectors';
+
 
 @Component({
   selector: 'app-pokedex-page',
@@ -41,6 +43,10 @@ export class PokedexPageComponent {
    * Sorting direction state.
    */
   readonly sortDirection = signal<'asc' | 'desc'>('asc');
+
+  readonly currentPage = signal(1);
+
+  readonly pageSize = signal(10);
 
   /**
    * Pokémon list signal from store.
@@ -88,6 +94,48 @@ export class PokedexPageComponent {
     });
   });
 
+  readonly paginatedPokemons = computed(() => {
+    const page = this.currentPage();
+
+    const size = this.pageSize();
+
+    const startIndex = (page - 1) * size;
+
+    const endIndex = startIndex + size;
+
+    return this.sortedPokemons().slice(
+      startIndex,
+      endIndex
+    );
+  });
+
+  readonly totalPages = computed(() => {
+    return Math.ceil(
+      this.sortedPokemons().length /
+        this.pageSize()
+    );
+  });
+
+  /**
+ * Moves to next page.
+  */
+  nextPage(): void {
+    if (
+      this.currentPage() <
+      this.totalPages()
+    ) {
+      this.currentPage.update((page) => page + 1);
+    }
+  }
+
+  /**
+   * Moves to previous page.
+   */
+  previousPage(): void {
+    if (this.currentPage() > 1) {
+      this.currentPage.update((page) => page - 1);
+    }
+  }
   constructor() {
     this.pokemonStore.loadPokemons(20, 0);
   }

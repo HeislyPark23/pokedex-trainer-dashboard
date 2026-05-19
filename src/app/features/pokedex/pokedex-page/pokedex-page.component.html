@@ -1,41 +1,88 @@
 <h1>Pokédex</h1>
 
+<div class="toolbar">
+  <input
+    type="text"
+    placeholder="Search Pokémon..."
+    [ngModel]="searchTerm()"
+    (ngModelChange)="searchTerm.set($event)"
+  />
+
+  <button
+    (click)="sortDirection.set(
+      sortDirection() === 'asc' ? 'desc' : 'asc'
+    )"
+  >
+    Sort: {{ sortDirection() }}
+  </button>
+</div>
+
 @if (loading()) {
   <p>Loading Pokémon...</p>
 }
-<input
-  type="text"
-  placeholder="Search Pokémon..."
-  [ngModel]="searchTerm()"
-  (ngModelChange)="searchTerm.set($event)"
-/>
+
 <table>
   <thead>
     <tr>
       <th>ID</th>
       <th>Name</th>
+      <th>Types</th>
       <th>Height</th>
       <th>Weight</th>
     </tr>
   </thead>
 
   <tbody>
-    @for (pokemon of filteredPokemons(); track pokemon.id) {
+    @for (pokemon of paginatedPokemons(); track pokemon.id) {
       <tr>
         <td>{{ pokemon.id }}</td>
 
-        <td>
+        <td class="pokemon-name">
           {{ pokemon.name }}
         </td>
 
         <td>
-          {{ pokemon.height }}
+          <div class="types">
+            @for (
+              type of pokemon.pokemon_v2_pokemontypes;
+              track type.pokemon_v2_type.name
+            ) {
+              <span
+                class="type-badge"
+                [class]="type.pokemon_v2_type.name"
+              >
+                {{ type.pokemon_v2_type.name }}
+              </span>
+            }
+          </div>
         </td>
 
-        <td>
-          {{ pokemon.weight }}
-        </td>
+        <td>{{ pokemon.height }}</td>
+
+        <td>{{ pokemon.weight }}</td>
       </tr>
     }
   </tbody>
 </table>
+
+<div class="pagination">
+  <button
+    (click)="previousPage()"
+    [disabled]="currentPage() === 1"
+  >
+    Previous
+  </button>
+
+  <span>
+    Page {{ currentPage() }}
+    of
+    {{ totalPages() }}
+  </span>
+
+  <button
+    (click)="nextPage()"
+    [disabled]="currentPage() === totalPages()"
+  >
+    Next
+  </button>
+</div>

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { map, Observable } from 'rxjs';
-
+import { tap } from 'rxjs/operators';
 import { GET_POKEMON_LIST } from '../../graphql/pokemon.queries';
 import { Pokemon } from '../../models/pokemon.model';
 
@@ -27,7 +27,13 @@ export class PokemonService {
         },
       })
       .valueChanges.pipe(
-        map((result) => result.data.pokemon_v2_pokemon)
+        tap((result) => {
+          console.log('GRAPHQL RESULT:', result);
+        }),
+
+        map((result: any) => {
+          return result?.data?.pokemon_v2_pokemon ?? [];
+        })
       );
   }
 }
