@@ -1,0 +1,18 @@
+<h2>Live Battle Feed</h2>
+
+<div class="feed">
+  @for (log of logs(); track log.id) {
+    <div
+      class="log-card"
+      [class]="log.severity"
+    >
+      <p>
+        {{ log.message }}
+      </p>
+
+      <small>
+        {{ log.timestamp }}
+      </small>
+    </div>
+  }
+</div>

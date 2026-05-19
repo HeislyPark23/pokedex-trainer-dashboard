@@ -18,7 +18,10 @@
 </div>
 
 @if (loading()) {
-  <p>Loading Pokémon...</p>
+    <div></div>
+} @else {
+    <!-- <p>Loading Pokémon...</p> -->
+    <app-loading-spinner />
 }
 
 <table>
@@ -154,6 +157,10 @@
             </div>
           }
         </div>
+
+        <app-pokemon-radar-chart
+            [pokemon]="pokemon"
+        />
       </div>
 
     </div>

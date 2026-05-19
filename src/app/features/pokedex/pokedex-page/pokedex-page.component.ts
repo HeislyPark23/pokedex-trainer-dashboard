@@ -1,3 +1,5 @@
+import { LoadingSpinnerComponent }
+from '../../../shared/components/loading-spinner/loading-spinner.component';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,7 +10,7 @@ import {
 
 import { CommonModule } from '@angular/common';
 
-import { FormsModule } from '@angular/forms';
+import { FormsModule,  } from '@angular/forms';
 
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -21,12 +23,18 @@ import {
   selectPokemons,
   
 } from '../../../state/pokemon.selectors';
-
+import { PokemonRadarChartComponent }
+from '../../../shared/components/pokemon-radar-chart/pokemon-radar-chart.component';
 
 @Component({
   selector: 'app-pokedex-page',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    PokemonRadarChartComponent,
+    LoadingSpinnerComponent,
+  ],
   templateUrl: './pokedex-page.component.html',
   styleUrl: './pokedex-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

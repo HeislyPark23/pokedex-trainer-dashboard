@@ -1,0 +1,154 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+  class="team-form"
+>
+
+  <h2>Team Builder</h2>
+
+  <div class="field">
+    <label>Team Name</label>
+
+    <input
+      type="text"
+      formControlName="teamName"
+    />
+
+    @if (
+      form.controls.teamName.invalid &&
+      form.controls.teamName.touched
+    ) {
+      <p class="error">
+        Team name must be 3–30 characters.
+      </p>
+    }
+
+    @if (
+        form.controls.teamName.errors?.['teamNameTaken']
+    ) {
+        <p class="error">
+            Team name already exists.
+        </p>
+    }
+  </div>
+
+  <button
+    type="button"
+    (click)="addPokemon()"
+  >
+    Add Pokémon
+  </button>
+
+  <p>
+    Selected:
+    {{ pokemonCount() }}/6
+  </p>
+
+  <div
+    formArrayName="pokemon"
+    class="pokemon-list"
+  >
+    @for (
+      control of pokemonControls.controls;
+      track $index
+    ) {
+      <div
+        class="pokemon-card"
+        [formGroupName]="$index"
+      >
+
+        <input
+          type="text"
+          formControlName="pokemonName"
+          placeholder="Pokémon name"
+        />
+
+        <input
+          type="text"
+          formControlName="nickname"
+          placeholder="Nickname"
+        />
+
+        <select
+          formControlName="heldItem"
+        >
+          <option>
+            Leftovers
+          </option>
+
+          <option>
+            Choice Band
+          </option>
+
+          <option>
+            Focus Sash
+          </option>
+        </select>
+
+        @if (competitiveMode()) {
+          <input
+            type="number"
+            formControlName="evTotal"
+            placeholder="EV total"
+          />
+        }
+
+        <button
+          type="button"
+          (click)="removePokemon($index)"
+        >
+          Remove
+        </button>
+
+      </div>
+    }
+  </div>
+
+  <div class="competitive-toggle">
+    <label>
+      Competitive Mode
+    </label>
+
+    <input
+      type="checkbox"
+      (change)="toggleCompetitiveMode()"
+    />
+  </div>
+
+  @if (competitiveMode()) {
+    <div class="field">
+      <label>
+        Competitive Tier
+      </label>
+
+      <select
+        formControlName="competitiveTier"
+      >
+        <option value="">
+          Select Tier
+        </option>
+
+        <option value="OU">
+          OU
+        </option>
+
+        <option value="UU">
+          UU
+        </option>
+
+        <option value="RU">
+          RU
+        </option>
+
+        <option value="NU">
+          NU
+        </option>
+      </select>
+    </div>
+  }
+
+  <button type="submit">
+    Save Team
+  </button>
+
+</form>

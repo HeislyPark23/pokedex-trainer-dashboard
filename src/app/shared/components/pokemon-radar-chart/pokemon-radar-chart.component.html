@@ -1,0 +1,11 @@
+@if (pokemon()) {
+  <div class="chart-container">
+    <canvas
+      baseChart
+      [data]="radarChartData()"
+      [options]="radarChartOptions"
+      [type]="'radar'"
+    >
+    </canvas>
+  </div>
+}
