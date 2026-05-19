@@ -1,0 +1,41 @@
+<h1>Pokédex</h1>
+
+@if (loading()) {
+  <p>Loading Pokémon...</p>
+}
+<input
+  type="text"
+  placeholder="Search Pokémon..."
+  [ngModel]="searchTerm()"
+  (ngModelChange)="searchTerm.set($event)"
+/>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Height</th>
+      <th>Weight</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (pokemon of filteredPokemons(); track pokemon.id) {
+      <tr>
+        <td>{{ pokemon.id }}</td>
+
+        <td>
+          {{ pokemon.name }}
+        </td>
+
+        <td>
+          {{ pokemon.height }}
+        </td>
+
+        <td>
+          {{ pokemon.weight }}
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

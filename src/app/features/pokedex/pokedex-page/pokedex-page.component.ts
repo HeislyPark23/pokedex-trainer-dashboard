@@ -1,0 +1,94 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
+
+import { CommonModule } from '@angular/common';
+
+import { FormsModule } from '@angular/forms';
+
+import { toSignal } from '@angular/core/rxjs-interop';
+
+import { Pokemon } from '../../../models/pokemon.model';
+
+import { PokemonStore } from '../../../state/pokemon.store';
+
+import {
+  selectLoading,
+  selectPokemons,
+} from '../../../state/pokemon.selectors';
+
+@Component({
+  selector: 'app-pokedex-page',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './pokedex-page.component.html',
+  styleUrl: './pokedex-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class PokedexPageComponent {
+  private readonly pokemonStore = inject(PokemonStore);
+
+  /**
+   * Search input state.
+   */
+  readonly searchTerm = signal('');
+
+  /**
+   * Sorting direction state.
+   */
+  readonly sortDirection = signal<'asc' | 'desc'>('asc');
+
+  /**
+   * Pokémon list signal from store.
+   */
+  readonly pokemons = toSignal(
+    selectPokemons(this.pokemonStore.state$),
+    {
+      initialValue: [] as Pokemon[],
+    }
+  );
+
+  /**
+   * Loading state signal.
+   */
+  readonly loading = toSignal(
+    selectLoading(this.pokemonStore.state$),
+    {
+      initialValue: false,
+    }
+  );
+
+  /**
+   * Filtered Pokémon based on search term.
+   */
+  readonly filteredPokemons = computed(() => {
+    const term = this.searchTerm().toLowerCase();
+
+    return this.pokemons().filter((pokemon) =>
+      pokemon.name.toLowerCase().includes(term)
+    );
+  });
+
+  /**
+   * Sorted Pokémon list.
+   */
+  readonly sortedPokemons = computed(() => {
+    const direction = this.sortDirection();
+
+    return [...this.filteredPokemons()].sort((a, b) => {
+      if (direction === 'asc') {
+        return a.name.localeCompare(b.name);
+      }
+
+      return b.name.localeCompare(a.name);
+    });
+  });
+
+  constructor() {
+    this.pokemonStore.loadPokemons(20, 0);
+  }
+}
